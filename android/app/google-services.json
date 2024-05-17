@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "498083395558",
+    "project_id": "stajbuldum-app",
+    "storage_bucket": "stajbuldum-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:498083395558:android:aeb70a6b329fd1d3c60827",
+        "android_client_info": {
+          "package_name": "com.example.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCPFCFBZdi1NWd4kkWJtLi3qzS8gCMzDrc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

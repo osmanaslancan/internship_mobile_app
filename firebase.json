@@ -1,0 +1,22 @@
+{
+    "flutter": {
+        "platforms": {
+            "android": {
+                "default": {
+                    "projectId": "stajbuldum-app",
+                    "appId": "1:498083395558:android:aeb70a6b329fd1d3c60827",
+                    "fileOutput": "android/app/google-services.json"
+                }
+            },
+            "dart": {
+                "lib/firebase_options.dart": {
+                    "projectId": "stajbuldum-app",
+                    "configurations": {
+                        "android": "1:498083395558:android:aeb70a6b329fd1d3c60827",
+                        "ios": "1:498083395558:ios:ab703fd7ae2ff228c60827"
+                    }
+                }
+            }
+        }
+    }
+}

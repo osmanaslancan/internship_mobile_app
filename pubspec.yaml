@@ -7,6 +7,8 @@ environment:
   sdk: '>=3.4.0 <4.0.0'
 
 dependencies:
+  firebase_core: ^2.31.0
+  firebase_messaging: ^14.9.2
   flutter:
     sdk: flutter
   webview_flutter: ^4.7.0
