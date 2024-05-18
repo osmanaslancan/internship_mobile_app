@@ -25,6 +25,7 @@ class MainApp extends StatefulWidget {
 class _MainAppState extends State<MainApp> {
   late WebViewController controller;
   int navigationBarIndex = 0;
+  ThemeMode themeMode = ThemeMode.system;
 
   initController() async {
     controller = WebViewController();
@@ -33,6 +34,17 @@ class _MainAppState extends State<MainApp> {
         onMessageReceived: (message) async {
       final apnsToken = await FirebaseMessaging.instance.getToken();
       await controller.runJavaScript('registerToken("$apnsToken")');
+    });
+    await controller.addJavaScriptChannel("FlutterChangeTheme",
+        onMessageReceived: (message) async {
+      if (message.message == "dark") {
+        themeMode = ThemeMode.dark;
+      }
+      if (message.message == "system") {
+        themeMode = ThemeMode.system;
+      } else {
+        themeMode = ThemeMode.light;
+      }
     });
     await controller.setJavaScriptMode(JavaScriptMode.unrestricted);
     await controller.setBackgroundColor(const Color(0x00000000));
@@ -48,7 +60,10 @@ class _MainAppState extends State<MainApp> {
         },
       ),
     );
-    await controller.loadRequest(Uri.parse('http://10.0.2.2:5173'));
+    await controller.loadRequest(Uri.parse('https://stajbuldum.osman.tech'));
+
+    var apnsToken = await FirebaseMessaging.instance.getAPNSToken();
+    print("apnsToken: ${apnsToken}");
   }
 
   @override
@@ -60,6 +75,13 @@ class _MainAppState extends State<MainApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      themeMode: themeMode,
+      theme: ThemeData(
+        scaffoldBackgroundColor: Colors.white,
+      ),
+      darkTheme: ThemeData.dark().copyWith(
+        scaffoldBackgroundColor: Color.fromRGBO(2, 8, 23, 1),
+      ),
       home: Scaffold(
         floatingActionButton: FloatingActionButton(
           onPressed: () {

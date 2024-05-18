@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +29,13 @@ class _MessagerState extends State<Messager> {
     );
 
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      if (Platform.isIOS) {
+        final apnsToken = await FirebaseMessaging.instance.getAPNSToken();
+
+        print(apnsToken);
+
+        return;
+      }
       final apnsToken = await FirebaseMessaging.instance.getToken();
       if (apnsToken != null) {
         print('APNs token: $apnsToken');
