@@ -12,6 +12,7 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
   runApp(const MainApp());
 }
 
@@ -83,12 +84,6 @@ class _MainAppState extends State<MainApp> {
         scaffoldBackgroundColor: Color.fromRGBO(2, 8, 23, 1),
       ),
       home: Scaffold(
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            controller.reload();
-          },
-          child: const Icon(Icons.refresh),
-        ),
         body: Messager(
           child: SafeArea(
             child: WebViewWidget(controller: controller),
