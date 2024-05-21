@@ -94,7 +94,7 @@ class _HomePageState extends State<HomePage> {
         onWebResourceError: (WebResourceError error) {},
         onNavigationRequest: (NavigationRequest request) {
           if (request.url.startsWith(
-              "https//vzmyswxvnmseubtqgjpc.supabase.co/storage/v1/object/sign/PrivateCvs")) {
+              "https://vzmyswxvnmseubtqgjpc.supabase.co/storage/v1/object/sign/PrivateCvs")) {
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => PdfViewerPage(url: request.url)));
             return NavigationDecision.prevent;
