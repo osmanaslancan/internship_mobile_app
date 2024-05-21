@@ -5,6 +5,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:internship_mobile_app/Messager.dart';
 import 'package:internship_mobile_app/firebase_options.dart';
+import 'package:internship_mobile_app/pdf_viewer_page.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 Future<void> main() async {
@@ -24,9 +25,44 @@ class MainApp extends StatefulWidget {
 }
 
 class _MainAppState extends State<MainApp> {
-  late WebViewController controller;
-  int navigationBarIndex = 0;
   ThemeMode themeMode = ThemeMode.system;
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      themeMode: themeMode,
+      theme: ThemeData(
+        scaffoldBackgroundColor: Colors.white,
+      ),
+      darkTheme: ThemeData.dark().copyWith(
+        scaffoldBackgroundColor: Color.fromRGBO(2, 8, 23, 1),
+      ),
+      home: HomePage(
+        onThemeChanged: (ThemeMode theme) {
+          setState(() {
+            themeMode = theme;
+          });
+        },
+      ),
+    );
+  }
+}
+
+class HomePage extends StatefulWidget {
+  const HomePage({
+    super.key,
+    required this.onThemeChanged,
+  });
+
+  final void Function(ThemeMode theme) onThemeChanged;
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  late WebViewController controller;
+  bool canPop = false;
 
   initController() async {
     controller = WebViewController();
@@ -39,12 +75,12 @@ class _MainAppState extends State<MainApp> {
     await controller.addJavaScriptChannel("FlutterChangeTheme",
         onMessageReceived: (message) async {
       if (message.message == "dark") {
-        themeMode = ThemeMode.dark;
+        widget.onThemeChanged(ThemeMode.dark);
       }
       if (message.message == "system") {
-        themeMode = ThemeMode.system;
+        widget.onThemeChanged(ThemeMode.system);
       } else {
-        themeMode = ThemeMode.light;
+        widget.onThemeChanged(ThemeMode.light);
       }
     });
     await controller.setJavaScriptMode(JavaScriptMode.unrestricted);
@@ -57,6 +93,12 @@ class _MainAppState extends State<MainApp> {
         onPageFinished: (String url) {},
         onWebResourceError: (WebResourceError error) {},
         onNavigationRequest: (NavigationRequest request) {
+          if (request.url.startsWith(
+              "https//vzmyswxvnmseubtqgjpc.supabase.co/storage/v1/object/sign/PrivateCvs")) {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => PdfViewerPage(url: request.url)));
+            return NavigationDecision.prevent;
+          }
           return NavigationDecision.navigate;
         },
       ),
@@ -75,19 +117,19 @@ class _MainAppState extends State<MainApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      themeMode: themeMode,
-      theme: ThemeData(
-        scaffoldBackgroundColor: Colors.white,
-      ),
-      darkTheme: ThemeData.dark().copyWith(
-        scaffoldBackgroundColor: Color.fromRGBO(2, 8, 23, 1),
-      ),
-      home: Scaffold(
-        body: Messager(
-          child: SafeArea(
-            child: WebViewWidget(controller: controller),
-          ),
+    return Scaffold(
+      appBar: canPop
+          ? AppBar(
+              leading: BackButton(
+                onPressed: () {
+                  controller.goBack();
+                },
+              ),
+            )
+          : null,
+      body: Messager(
+        child: SafeArea(
+          child: WebViewWidget(controller: controller),
         ),
       ),
     );
